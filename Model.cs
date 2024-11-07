@@ -6,6 +6,9 @@ public class BloggingContext : DbContext
 {
     public DbSet<Blog> Blogs { get; set; }
     public DbSet<Post> Posts { get; set; }
+    public DbSet<Task> Tasks { get; set; }
+    public DbSet<Todo> Todos { get; set; }
+
 
     public string DbPath { get; }
 
@@ -39,3 +42,22 @@ public class Post
     public int BlogId { get; set; }
     public Blog Blog { get; set; }
 }
+
+public class Task
+{
+    public int TaskId { get; set; }
+    public string Name { get; set; }
+    public List<Todo> Todos { get; set; }
+
+    public Task()
+    {
+        Todos = new List<Todo>();
+    }
+}
+
+public class Todo
+{
+    public int TodoId { get; set; }
+    public string Name { get; set; }
+    public bool IsComplete { get; set; }
+}   

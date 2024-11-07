@@ -47,8 +47,12 @@ using (BloggingContext context = new())
     }
 }
 
+Console.WriteLine("\nPress Enter to Continue...");
 Console.ReadLine();
 
+printIncompleteTasksAndTodos();
+
+Console.ReadLine();
 
 
 // Methods
@@ -81,4 +85,26 @@ static void seedTasks(BloggingContext db)
 
     db.SaveChanges();
     Console.WriteLine("\nTasks and todos have been added to the database.");
+}
+
+static void printIncompleteTasksAndTodos()
+{
+    using (BloggingContext context = new())
+    {
+        var tasks = context.Tasks
+            .Include(task => task.Todos)
+            .Where(task => task.Todos.Any(task => task.IsComplete == false))
+            .ToList();
+
+        Console.WriteLine("----------------\nIncomplete Tasks \n----------------");
+
+        foreach (var task in tasks)
+        {
+            Console.WriteLine($"Task: {task.Name}");
+            foreach (var todo in task.Todos)
+            {
+                Console.WriteLine($"- Todo: {todo.Name}");
+            }
+        }
+    }
 }
